@@ -47,4 +47,5 @@ function showCookiesForTab(tabs) {
   function getActiveTab() {
     return browser.tabs.query({currentWindow: true, active: true});
   }
-  getActiveTab().then(showCookiesForTab);
+
+  getActiveTab().then( showCookiesForTab);

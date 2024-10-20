@@ -12,5 +12,12 @@
     "manifest_version": 2,
     "name": "Contador de cookies",
     "version": "1.0",
-    "permissions": ["cookies","<all_urls>","tabs"]
+    "permissions": [
+      "cookies","<all_urls>","tabs",
+      "webRequest", "webRequestBlocking", "*://*/*", "activeTab"
+    ],
+
+    "background": {
+      "scripts": ["background.js"]
+    }
   }
