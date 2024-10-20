@@ -1,0 +1,16 @@
+{
+    "browser_action": {
+      "browser_style": true,
+      "default_title": "Extensão de cibersegurança",
+      "default_popup": "popup/janela.html",
+      "default_icon": "icons/border-48.png"
+    },
+    "description": "Contabiliza os cookies de uma página",
+    "icons": {
+      "48": "icons/border-48.png"
+    },
+    "manifest_version": 2,
+    "name": "Contador de cookies",
+    "version": "1.0",
+    "permissions": ["cookies","<all_urls>","tabs"]
+  }
