@@ -9,7 +9,7 @@ function showCookiesForTab(tabs) {
   
       //set the header of the panel
       let activeTabUrl = document.getElementById('header-title');
-      let text = document.createTextNode("Cookies at: "+tab.title);
+      let text = document.createTextNode("Análise em "+tab.title);
       let cookieList = document.getElementById('cookie-list');
       activeTabUrl.appendChild(text);
   
@@ -32,7 +32,7 @@ function showCookiesForTab(tabs) {
 
       // show the number of cookies
       let p = document.createElement("p");
-      let content = document.createTextNode("Number of cookies: " + cookies.length);
+      let content = document.createTextNode("Número de cookies: " + cookies.length);
       let parent = cookieList.parentNode;
 
       p.appendChild(content);

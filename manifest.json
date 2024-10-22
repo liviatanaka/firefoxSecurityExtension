@@ -14,10 +14,12 @@
     "version": "1.0",
     "permissions": [
       "cookies","<all_urls>","tabs",
-      "webRequest", "webRequestBlocking", "*://*/*", "activeTab"
+      "webRequest", "webRequestBlocking", "*://*/*", "activeTab",
+      "storage"
     ],
 
     "background": {
-      "scripts": ["background.js"]
+      "scripts": ["background.js"],
+      "persistent": true
     }
   }

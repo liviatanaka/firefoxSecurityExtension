@@ -1,7 +1,8 @@
 let thirdPartyRequests = [];
-// let thirdPartyRequests= new Set();
+let thirdPartyRequestsByHost = {};
 
-// Função para verificar se a aba atual é a aba ativa
+
+// Função para verificar se a requisição é de terceira parte
 function isThirdParty(requestDetails, activeTabUrl) {
   const requestUrl = new URL(requestDetails.url);
   const tabUrl = new URL(activeTabUrl);
@@ -12,6 +13,8 @@ function isThirdParty(requestDetails, activeTabUrl) {
 function logRequest(requestDetails, activeTabUrl) {
   if (isThirdParty(requestDetails, activeTabUrl)) {
     thirdPartyRequests.push(requestDetails.url);
+    const hostname = new URL(requestDetails.originUrl).hostname;
+    thirdPartyRequestsByHost[hostname] = (thirdPartyRequestsByHost[hostname] || []).concat(requestDetails.url);
   }
 }
 
@@ -32,9 +35,33 @@ browser.webRequest.onBeforeRequest.addListener(
   { urls: ["<all_urls>"] }
 );
 
+
+
 // Listener para enviar as requisições de terceiros para o popup quando solicitado
 browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message === "getThirdPartyRequests") {
-    sendResponse(thirdPartyRequests);
+    let activeTabUrl = browser.tabs.query({active: true, currentWindow: true})
+      .then(tabs => tabs[0].url);
+
+    activeTabUrl.then(url => {
+      const hostname = new URL(url).hostname;
+      console.log("Hostname:", hostname);
+
+
+      let filteredRequests;
+      if (hostname in thirdPartyRequestsByHost) {
+        filteredRequests = thirdPartyRequestsByHost[hostname];
+      } else {
+        filteredRequests = [];
+      }
+
+      console.log("Filtered requests:", filteredRequests);
+      sendResponse(filteredRequests);
+    }).catch(error => {
+      console.error("Error getting active tab URL:", error);
+      sendResponse([]);  // Envia uma array vazia em caso de erro
+    });
+
+    return true;  
   }
 });

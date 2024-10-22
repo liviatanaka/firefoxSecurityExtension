@@ -1,12 +1,13 @@
 // create a function to show the third-party requests
-function showThirdPartyRequestsAndCookies() {
+function showThirdPartyRequests() {
   document.addEventListener('DOMContentLoaded', () => {
     browser.runtime.sendMessage("getThirdPartyRequests").then(requests => {
       const list = document.getElementById("third-party-list");
       list.innerHTML = "";
+      console.log(requests);
       
       // if there are no requests, show a message
-      if (requests.length === 0) {
+      if (!requests || requests.length === 0) {
         list.innerHTML = "<li>Nenhuma requisição de terceiros encontrada</li>";
         return;
       }
@@ -48,6 +49,9 @@ function showThirdPartyRequestsAndCookies() {
           const urlLi = document.createElement("li");
           urlLi.className = "url-item";
           urlLi.textContent = url;
+          urlLi.addEventListener("click", () => {
+            browser.tabs.create({url: url});
+          });
           ul.appendChild(urlLi);
         });
 
@@ -67,4 +71,4 @@ function showThirdPartyRequestsAndCookies() {
   });
 }
 
-showThirdPartyRequestsAndCookies();
+showThirdPartyRequests();
