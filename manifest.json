@@ -15,11 +15,18 @@
     "permissions": [
       "cookies","<all_urls>","tabs",
       "webRequest", "webRequestBlocking", "*://*/*", "activeTab",
-      "storage"
+      "storage", "webNavigation"
     ],
 
     "background": {
-      "scripts": ["background.js"],
-      "persistent": true
-    }
+      "scripts": ["background.js", "popup/scripts/canvas.js"]
+    },
+    
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": ["popup/scripts/canvas.js"]
+      }
+    ]
+    
   }
