@@ -5,7 +5,7 @@ let thirdPartyRequestsByHost = {};
 // Função para verificar se a requisição é de terceira parte
 function isThirdParty(requestDetails, activeTabUrl) {
   const requestUrl = new URL(requestDetails.url);
-  const tabUrl = new URL(activeTabUrl);
+  const tabUrl = new URL(requestDetails.originUrl);
   return requestUrl.hostname !== tabUrl.hostname;
 }
 
