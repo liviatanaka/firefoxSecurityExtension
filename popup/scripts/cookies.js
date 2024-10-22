@@ -1,51 +1,68 @@
-
 function showCookiesForTab(tabs) {
-    //get the first tab object in the array
-    let tab = tabs.pop();
-  
-    //get all cookies in the domain
-    let gettingAllCookies = browser.cookies.getAll({url: tab.url});
-    gettingAllCookies.then((cookies) => {
-  
-      //set the header of the panel
-      let activeTabUrl = document.getElementById('header-title');
-      let text = document.createTextNode("Análise em "+tab.title);
-      let cookieList = document.getElementById('cookie-list');
-      activeTabUrl.appendChild(text);
-  
-      // if (cookies.length > 0) {
-      //   //add an <li> item with the name and value of the cookie to the list
-      //   for (let cookie of cookies) {
-      //     let li = document.createElement("li");
-      //     let content = document.createTextNode(cookie.name + ": "+ cookie.value);
-      //     li.appendChild(content);
-      //     cookieList.appendChild(li);
-      //   }
-      // } else {
-      //   let p = document.createElement("p");
-      //   let content = document.createTextNode("No cookies in this tab.");
-      //   let parent = cookieList.parentNode;
-  
-      //   p.appendChild(content);
-      //   parent.appendChild(p);
-      // }
+  let tab = tabs.pop();
+  let gettingAllCookies = browser.cookies.getAll({url: tab.url});
+  gettingAllCookies.then((cookies) => {
+    let firstPartyCookies = [];
+    let thirdPartyCookies = [];
+    let sessionCookies = [];
+    let persistentCookies = [];
 
-      // show the number of cookies
-      let p = document.createElement("p");
-      let content = document.createTextNode("Número de cookies: " + cookies.length);
-      let parent = cookieList.parentNode;
+    cookies.forEach(cookie => {
+      if (tab.url.includes(cookie.domain.slice(1)) && cookie.firstPartyDomain == "") {
+        firstPartyCookies.push(cookie);
+      } else {
+        thirdPartyCookies.push(cookie);
+      }
 
-      p.appendChild(content);
-      parent.appendChild(p);
-
-      // }
+      if (cookie.session) {
+        sessionCookies.push(cookie);
+      } else {
+        persistentCookies.push(cookie);
+      }
     });
-  }
-  
-  //get active tab to run an callback function.
-  //it sends to our callback an array of tab objects
-  function getActiveTab() {
-    return browser.tabs.query({currentWindow: true, active: true});
-  }
+    let cookieList = document.getElementById('cookie-list');
+    cookieList.innerHTML = `
+      <h2 class="toggle-header"> <span class="toggle-icon">▶</span>🍪 Cookies</h2>
+      <ul class="cookie-details" style="display: none;">
+        <li class="cookie-item">
+          <span class="cookie-type">🍪 Primeira parte:</span>
+          <span class="cookie-count">${firstPartyCookies.length}</span>
+        </li>
+        <li class="cookie-item">
+          <span class="cookie-type">🌐 Terceira parte:</span>
+          <span class="cookie-count">${thirdPartyCookies.length}</span>
+        </li>
+        <li class="cookie-item">
+          <span class="cookie-type">⏳ Sessão:</span>
+          <span class="cookie-count">${sessionCookies.length}</span>
+        </li>
+        <li class="cookie-item">
+          <span class="cookie-type">💾 Persistentes:</span>
+          <span class="cookie-count">${persistentCookies.length}</span>
+        </li>
+      </ul>
+    `;
 
-  getActiveTab().then( showCookiesForTab);
+    // Adicionar estilos dinâmicos
+    cookieList.querySelectorAll('.cookie-item').forEach(item => {
+      const count = parseInt(item.querySelector('.cookie-count').textContent);
+      item.style.opacity = count > 0 ? '1' : '0.5';
+    });
+
+    // Adicionar funcionalidade de toggle
+    const toggleHeader = cookieList.querySelector('.toggle-header');
+    const cookieDetails = cookieList.querySelector('.cookie-details');
+    const toggleIcon = cookieList.querySelector('.toggle-icon');
+
+    toggleHeader.addEventListener('click', () => {
+      cookieDetails.style.display = cookieDetails.style.display === 'none' ? 'block' : 'none';
+      toggleIcon.textContent = cookieDetails.style.display === 'none' ? '▶' : '▼';
+    });
+  });
+}
+
+function getActiveTab() {
+  return browser.tabs.query({currentWindow: true, active: true});
+}
+
+getActiveTab().then(showCookiesForTab);
