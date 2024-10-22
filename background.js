@@ -4,9 +4,13 @@ let thirdPartyRequestsByHost = {};
 
 // Função para verificar se a requisição é de terceira parte
 function isThirdParty(requestDetails, activeTabUrl) {
-  const requestUrl = new URL(requestDetails.url);
-  const tabUrl = new URL(requestDetails.originUrl);
-  return requestUrl.hostname !== tabUrl.hostname;
+  try{
+    const requestUrl = new URL(requestDetails.url);
+    const tabUrl = new URL(requestDetails.originUrl);
+    return requestUrl.hostname !== tabUrl.hostname;
+  } catch (error) {
+    return false;
+  }
 }
 
 // Função para capturar as requisições de terceiros
@@ -45,7 +49,6 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     activeTabUrl.then(url => {
       const hostname = new URL(url).hostname;
-      console.log("Hostname:", hostname);
 
 
       let filteredRequests;
@@ -55,11 +58,10 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         filteredRequests = [];
       }
 
-      console.log("Filtered requests:", filteredRequests);
       sendResponse(filteredRequests);
     }).catch(error => {
       console.error("Error getting active tab URL:", error);
-      sendResponse([]);  // Envia uma array vazia em caso de erro
+      sendResponse([]);  // Envia um array vazio em caso de erro
     });
 
     return true;  

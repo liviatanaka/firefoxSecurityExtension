@@ -1,72 +1,77 @@
-// create a function to show the third-party requests
+
 function showThirdPartyRequests() {
   document.addEventListener('DOMContentLoaded', () => {
+    const thirdPartySection = document.getElementById("third-party-list");
+    
+    // Título da seção
+    const toggleHeader = document.createElement('h2');
+    toggleHeader.className = 'toggle-header';
+    toggleHeader.innerHTML = '<span class="toggle-icon">▶</span> 🌐 Requisições de Terceiros';
+    
+    // Div para conter o conteúdo
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'third-party-content';
+    contentDiv.style.display = 'none';
+    
+    // Adicionar o título e o conteúdo à seção
+    thirdPartySection.appendChild(toggleHeader);
+    thirdPartySection.appendChild(contentDiv);
+    
+    // Adicionar evento de clique para alternar a visibilidade
+    toggleHeader.addEventListener('click', () => {
+      contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
+      toggleHeader.querySelector('.toggle-icon').textContent = contentDiv.style.display === 'none' ? '▶' : '▼';
+    });
+
     browser.runtime.sendMessage("getThirdPartyRequests").then(requests => {
-      const list = document.getElementById("third-party-list");
-      list.innerHTML = "";
-      console.log(requests);
-      
-      // if there are no requests, show a message
+      // Se não houver requisições
       if (!requests || requests.length === 0) {
-        list.innerHTML = "<li>Nenhuma requisição de terceiros encontrada</li>";
+        contentDiv.innerHTML = "<p style='color: green;'>Nenhuma requisição de terceiros encontrada</p>";
         return;
       }
 
-      // Remove duplicate URLs
+      // Remover repetições
       const uniqueRequests = [...new Set(requests)];
 
-      // group by hostname
+      // Agrupar por hostname
       const groupedRequests = uniqueRequests.reduce((acc, url) => {
         const hostname = new URL(url).hostname;
         acc[hostname] = (acc[hostname] || []).concat(url);
         return acc;
       }, {});
 
-      // show the grouped requests by toggling the list
+      // Mostrar as requisições agrupadas
       Object.entries(groupedRequests).forEach(([hostname, urls]) => {
-        const li = document.createElement("li");
-        li.className = "hostname-item";
+        const hostnameDiv = document.createElement("div");
+        hostnameDiv.className = "hostname-item";
         
-        const toggleIcon = document.createElement("span");
-        toggleIcon.className = "toggle-icon";
-        toggleIcon.textContent = "▶";
-        li.appendChild(toggleIcon);
+        const hostnameToggle = document.createElement("div");
+        hostnameToggle.className = "hostname-toggle";
+        hostnameToggle.innerHTML = `<span class="toggle-icon">▶</span> ${hostname} <span class="url-count">(${urls.length})</span>`;
+        hostnameDiv.appendChild(hostnameToggle);
         
-        const hostnameText = document.createElement("span");
-        hostnameText.textContent = ` ${hostname} (${urls.length})`;
-        li.appendChild(hostnameText);
-        
-        list.appendChild(li);
+        const urlList = document.createElement("ul");
+        urlList.className = "url-list";
+        urlList.style.display = "none";
+        hostnameDiv.appendChild(urlList);
 
-        // Create a nested unordered list for URLs
-        const ul = document.createElement("ul");
-        ul.className = "url-list";
-        ul.style.display = "none";
-        li.appendChild(ul);
-
-        // Add URLs to the nested list
         urls.forEach(url => {
-          const urlLi = document.createElement("li");
-          urlLi.className = "url-item";
-          urlLi.textContent = url;
-          urlLi.addEventListener("click", () => {
+          const urlItem = document.createElement("li");
+          urlItem.className = "url-item";
+          urlItem.textContent = url;
+          urlItem.addEventListener("click", () => {
             browser.tabs.create({url: url});
           });
-          ul.appendChild(urlLi);
+          urlList.appendChild(urlItem);
         });
 
-        // Add click event to toggle the nested list
-        li.addEventListener("click", (event) => {
-          if (event.target === li || event.target === toggleIcon || event.target === hostnameText) {
-            ul.style.display = ul.style.display === "none" ? "block" : "none";
-            toggleIcon.textContent = ul.style.display === "none" ? "▶" : "▼";
-          }
+        hostnameToggle.addEventListener("click", () => {
+          urlList.style.display = urlList.style.display === "none" ? "block" : "none";
+          hostnameToggle.querySelector('.toggle-icon').textContent = urlList.style.display === "none" ? "▶" : "▼";
         });
+
+        contentDiv.appendChild(hostnameDiv);
       });
-
-
-
-      
     });
   });
 }
