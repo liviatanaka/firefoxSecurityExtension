@@ -19,7 +19,7 @@
     ],
 
     "background": {
-      "scripts": ["background.js", "popup/scripts/canvas.js"]
+      "scripts": ["background.js"]
     },
     
     "content_scripts": [

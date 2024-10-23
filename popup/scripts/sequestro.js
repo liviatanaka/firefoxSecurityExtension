@@ -3,21 +3,12 @@ function detectBrowserThreats() {
     return browser.tabs.executeScript({
       code: `
         // Detecção de possíveis tentativas de hijacking
-        const hijackingAttempts = [];
-        
-
-      
-        // Verifica se há scripts suspeitos injetados
-        const suspiciousScripts = document.querySelectorAll('script:not([src])');
-        if (suspiciousScripts.length > 0) {
-          hijackingAttempts.push('Scripts inline suspeitos detectados');
-        }
-
+        var hijackingAttempts = [];
         
 
 
         // Detecção de hookings ou injeções de scripts maliciosos
-        const hookingAttempts = [];
+        var hookingAttempts = [];
         document.addEventListener('DOMNodeInserted', function(event) {
           if (event.target.tagName === 'SCRIPT') {
             const scriptSrc = event.target.src || 'inline script';
@@ -35,11 +26,12 @@ function detectBrowserThreats() {
         }
   
         // Retorna o número de tentativas suspeitas
-        const totalHijackingAttempts = hijackingAttempts.filter(Boolean).length;
-        const totalHookingAttempts = hookingAttempts.length;
+        var totalHijackingAttempts = hijackingAttempts.filter(Boolean).length;
+        var totalHookingAttempts = hookingAttempts.length;
         
         // Definição de um "score" de ameaça baseado nas detecções
         totalHijackingAttempts + totalHookingAttempts;
+        
       `
     }).then(results => {
       const suspiciousActions = results[0];
@@ -60,7 +52,7 @@ function detectBrowserThreats() {
             <span class="toggle-icon">▶</span> 🖥️ Browser Hijacking & Hooking
           </h2>
           <div class="hijacking-content" style="display: none;">
-            <div class="hijacking-score" style=" color: ${score > 0 ? 'red' : 'green'};">
+            <div class="hijacking-score" style="font-weight: bold; color: ${score > 0 ? 'red' : 'green'};">
               ${score > 0 ? 'Ameaça Detectada' : 'Nenhuma ameaça detectada'}
             </div>
             <div class="hijacking-description">

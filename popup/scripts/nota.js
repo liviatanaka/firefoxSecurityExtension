@@ -5,7 +5,7 @@ function calculatePrivacyScore() {
   Promise.all([
     checkCookies(),
     checkCanvasFingerprinting(),
-    detectBrowserHijacking(),
+    detectBrowserThreats(),
     checkLocalStorage(),
     checkThirdPartyRequests()
   ]).then(results => {
@@ -37,10 +37,8 @@ function displayScore(score) {
   const scoreElement = document.getElementById('privacy-score');
   if (scoreElement) {
     scoreElement.innerHTML = `
-      <h2 class="toggle-header">
-        <span class="toggle-icon">▶</span> 🔒 Pontuação de Privacidade
-      </h2>
-      <div class="score-content" style="display: none;">
+      <h2>🔒 Pontuação de Privacidade</h2>
+      <div class="score-content">
         <div class="score-value" style="font-size: 24px; font-weight: bold; color: ${getScoreColor(score)};">
           ${score}/100
         </div>
@@ -49,7 +47,6 @@ function displayScore(score) {
         </div>
       </div>
     `;
-    addToggleListener(scoreElement);
   }
 }
 
@@ -65,16 +62,7 @@ function getScoreDescription(score) {
   return 'Privacidade baixa. Recomenda-se tomar medidas para aumentar a proteção.';
 }
 
-function addToggleListener(element) {
-  const header = element.querySelector('.toggle-header');
-  const content = element.querySelector('.score-content');
-  const icon = element.querySelector('.toggle-icon');
-  
-  header.addEventListener('click', () => {
-    content.style.display = content.style.display === 'none' ? 'block' : 'none';
-    icon.textContent = content.style.display === 'none' ? '▶' : '▼';
-  });
-}
+
 
 // Executa a função quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', calculatePrivacyScore);
