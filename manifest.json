@@ -3,14 +3,14 @@
       "browser_style": true,
       "default_title": "Extensão de cibersegurança",
       "default_popup": "popup/janela.html",
-      "default_icon": "icons/border-48.png"
+      "default_icon": "icons/fire_shield.png"
     },
-    "description": "Contabiliza os cookies de uma página",
+    "description": "Realiza uma análise de segurança de uma página web",
     "icons": {
-      "48": "icons/border-48.png"
+      "48": "icons/fire_shield.png"
     },
     "manifest_version": 2,
-    "name": "Contador de cookies",
+    "name": "Fire Shield",
     "version": "1.0",
     "permissions": [
       "cookies","<all_urls>","tabs",

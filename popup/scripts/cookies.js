@@ -20,6 +20,12 @@ function showCookiesForTab(tabs) {
         persistentCookies.push(cookie);
       }
     });
+
+    // Título
+    const headerTitle = document.getElementById('header-title');
+    headerTitle.textContent = `🔍 Análise do site: ${tab.title}`;
+    headerTitle.style.color = '#4a4a4a';
+
     let cookieList = document.getElementById('cookie-list');
     cookieList.innerHTML = `
       <h2 class="toggle-header"> <span class="toggle-icon">▶</span>🍪 Cookies</h2>
@@ -43,13 +49,13 @@ function showCookiesForTab(tabs) {
       </ul>
     `;
 
-    // Adicionar estilos dinâmicos
+    // Adiciona estilos dinâmicos  
     cookieList.querySelectorAll('.cookie-item').forEach(item => {
       const count = parseInt(item.querySelector('.cookie-count').textContent);
       item.style.opacity = count > 0 ? '1' : '0.5';
     });
 
-    // Adicionar funcionalidade de toggle
+    // Adiciona funcionalidade de toggle
     const toggleHeader = cookieList.querySelector('.toggle-header');
     const cookieDetails = cookieList.querySelector('.cookie-details');
     const toggleIcon = cookieList.querySelector('.toggle-icon');

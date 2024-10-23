@@ -58,7 +58,7 @@ function displayLocalStorageUsage() {
         </div>
       `;
 
-      // Adicionar funcionalidade de toggle para o conteúdo principal
+      // Adiciona funcionalidade de toggle para o conteúdo principal
       const mainToggleHeader = statusElement.querySelector('.toggle-header');
       const mainContent = statusElement.querySelector('.local-storage-content');
       const mainToggleIcon = mainToggleHeader.querySelector('.toggle-icon');
@@ -68,7 +68,7 @@ function displayLocalStorageUsage() {
         mainToggleIcon.textContent = mainContent.style.display === 'none' ? '▶' : '▼';
       });
 
-      // Adicionar funcionalidade de toggle para os itens do localStorage
+      // Adiciona funcionalidade de toggle para os itens do localStorage
       if (usage.itemCount > 0) {
         const itemsToggleHeader = statusElement.querySelector('.local-storage-content .toggle-header');
         const itemsContent = statusElement.querySelector('.local-storage-items');
@@ -103,5 +103,5 @@ function displayLocalStorageUsage() {
     });
 }
 
-// Executar a função quando o DOM estiver carregado
+// Executa a função quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', displayLocalStorageUsage);

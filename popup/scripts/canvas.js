@@ -52,21 +52,21 @@ function displayCanvasFingerprinting() {
 
   const canvasElement = document.getElementById('canvas-fingerprint');
   
-  // Create the h2 toggle element
+  // Título	
   const toggleHeader = document.createElement('h2');
   toggleHeader.className = 'toggle-header';
   toggleHeader.innerHTML = '<span class="toggle-icon">▶</span> 🎨 Canvas Fingerprinting';
   
-  // Create a div to hold the content
+  // Conteúdo
   const contentDiv = document.createElement('div');
   contentDiv.className = 'canvas-content';
   contentDiv.style.display = 'none';
   
-  // Add the toggle and content div to the canvasElement
+  // Adiciona o título e o conteúdo ao elemento canvas
   canvasElement.appendChild(toggleHeader);
   canvasElement.appendChild(contentDiv);
   
-  // Add click event to toggle visibility
+  // Adiciona evento de clique para alternar a visibilidade
   toggleHeader.addEventListener('click', () => {
     contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
     toggleHeader.querySelector('.toggle-icon').textContent = contentDiv.style.display === 'none' ? '▶' : '▼';
