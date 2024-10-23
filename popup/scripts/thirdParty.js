@@ -8,7 +8,6 @@ function showThirdPartyRequests() {
     toggleHeader.className = 'toggle-header';
     toggleHeader.innerHTML = '<span class="toggle-icon">▶</span> 🌐 Requisições de Terceiros';
     
-    // Div para conter o conteúdo
     const contentDiv = document.createElement('div');
     contentDiv.className = 'third-party-content';
     contentDiv.style.display = 'none';
@@ -17,7 +16,7 @@ function showThirdPartyRequests() {
     thirdPartySection.appendChild(toggleHeader);
     thirdPartySection.appendChild(contentDiv);
     
-    // Adicionar evento de clique para alternar a visibilidade
+    // Adicionar evento de clique para toogle
     toggleHeader.addEventListener('click', () => {
       contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
       toggleHeader.querySelector('.toggle-icon').textContent = contentDiv.style.display === 'none' ? '▶' : '▼';

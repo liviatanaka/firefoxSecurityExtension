@@ -66,7 +66,7 @@ function displayCanvasFingerprinting() {
   canvasElement.appendChild(toggleHeader);
   canvasElement.appendChild(contentDiv);
   
-  // Adiciona evento de clique para alternar a visibilidade
+  // Adiciona evento do toogle
   toggleHeader.addEventListener('click', () => {
     contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
     toggleHeader.querySelector('.toggle-icon').textContent = contentDiv.style.display === 'none' ? '▶' : '▼';
@@ -85,7 +85,7 @@ function displayCanvasFingerprinting() {
   });
 }
 
-// Executar a detecção quando o DOM estiver carregado
+// Executa a detecção quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', function() {
   displayCanvasFingerprinting();
 });

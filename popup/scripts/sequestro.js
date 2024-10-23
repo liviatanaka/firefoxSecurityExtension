@@ -2,10 +2,6 @@
 function detectBrowserThreats() {
     return browser.tabs.executeScript({
       code: `
-        // Detecção de possíveis tentativas de hijacking
-        var hijackingAttempts = [];
-        
-
 
         // Detecção de hookings ou injeções de scripts maliciosos
         var hookingAttempts = [];
@@ -26,11 +22,10 @@ function detectBrowserThreats() {
         }
   
         // Retorna o número de tentativas suspeitas
-        var totalHijackingAttempts = hijackingAttempts.filter(Boolean).length;
         var totalHookingAttempts = hookingAttempts.length;
         
         // Definição de um "score" de ameaça baseado nas detecções
-        totalHijackingAttempts + totalHookingAttempts;
+        totalHookingAttempts;
         
       `
     }).then(results => {
